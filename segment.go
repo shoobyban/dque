@@ -115,6 +115,25 @@ func (seg *qSegment) load() error {
 	return nil
 }
 
+// peekBy returns the nth item in the segment without removing it.
+// If the queue is already empty, the emptySegment error will be returned.
+func (seg *qSegment) peekBy(n int) (interface{}, error) {
+
+	// This is heavy-handed but its safe
+	seg.mutex.Lock()
+	defer seg.mutex.Unlock()
+
+	if len(seg.objects) <= n {
+		// Queue is empty so return nil object (and emptySegment error)
+		return nil, errEmptySegment
+	}
+
+	// Save a reference to the first item in the in-memory queue
+	object := seg.objects[n]
+
+	return object, nil
+}
+
 // peek returns the first item in the segment without removing it.
 // If the queue is already empty, the emptySegment error will be returned.
 func (seg *qSegment) peek() (interface{}, error) {

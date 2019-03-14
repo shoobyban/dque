@@ -132,6 +132,25 @@ func NewOrOpen(name string, dirPath string, itemsPerSegment int, builder func() 
 	return New(name, dirPath, itemsPerSegment, builder)
 }
 
+// PeekByOffset the nth item in the queue without dequeueing it.
+func (q *DQue) PeekByOffset(n int) (interface{}, error) {
+	// This is heavy-handed but its safe
+	q.mutex.Lock()
+	defer q.mutex.Unlock()
+
+	// Return the nth object from the first segment
+	obj, err := q.firstSegment.peekBy(n)
+	if err == errEmptySegment {
+		return nil, ErrEmpty
+	}
+	if err != nil {
+		// In reality this will (i.e. should not) never happen
+		return nil, errors.Wrap(err, "error getting item from the first segment")
+	}
+
+	return obj, nil
+}
+
 // Length returns number of items in the queue
 func (q *DQue) Length() int {
 	return q.firstSegment.size() + q.lastSegment.size()
