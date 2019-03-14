@@ -132,6 +132,11 @@ func NewOrOpen(name string, dirPath string, itemsPerSegment int, builder func() 
 	return New(name, dirPath, itemsPerSegment, builder)
 }
 
+// Length returns number of items in the queue
+func (q *DQue) Length() int {
+	return q.firstSegment.size() + q.lastSegment.size()
+}
+
 // Enqueue adds an item to the end of the queue
 func (q *DQue) Enqueue(obj interface{}) error {
 
