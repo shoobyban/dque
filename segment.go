@@ -117,13 +117,13 @@ func (seg *qSegment) load() error {
 
 // peekBy returns the nth item in the segment without removing it.
 // If the queue is already empty, the emptySegment error will be returned.
-func (seg *qSegment) peekBy(n int) (interface{}, error) {
+func (seg *qSegment) peekBy(n uint64) (interface{}, error) {
 
 	// This is heavy-handed but its safe
 	seg.mutex.Lock()
 	defer seg.mutex.Unlock()
 
-	if len(seg.objects) <= n {
+	if len(seg.objects) <= int(n) {
 		// Queue is empty so return nil object (and emptySegment error)
 		return nil, errEmptySegment
 	}

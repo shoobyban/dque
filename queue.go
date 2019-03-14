@@ -133,7 +133,7 @@ func NewOrOpen(name string, dirPath string, itemsPerSegment int, builder func() 
 }
 
 // PeekByOffset the nth item in the queue without dequeueing it.
-func (q *DQue) PeekByOffset(n int) (interface{}, error) {
+func (q *DQue) PeekByOffset(n uint64) (interface{}, error) {
 	// This is heavy-handed but its safe
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
