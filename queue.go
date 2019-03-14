@@ -152,8 +152,8 @@ func (q *DQue) PeekByOffset(n int) (interface{}, error) {
 }
 
 // Length returns number of items in the queue
-func (q *DQue) Length() int {
-	return q.firstSegment.size() + q.lastSegment.size()
+func (q *DQue) Length() int64 {
+	return int64(q.firstSegment.size() + q.lastSegment.size())
 }
 
 // Enqueue adds an item to the end of the queue
